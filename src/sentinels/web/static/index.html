@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sentinels — Autonomous Multi-Agent Security Audit Platform</title>
+  
+  <!-- Google Fonts & Material Symbols -->
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+
+  <!-- Tailwind CSS v3 -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  
+  <!-- Custom Light Theme Styles -->
+  <link rel="stylesheet" href="/static/style.css"/>
+
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-container-high": "#e6e8ea",
+            "surface-variant": "#e0e3e5",
+            "secondary-fixed": "#e2dfff",
+            "on-tertiary-fixed-variant": "#005236",
+            "secondary-fixed-dim": "#c3c0ff",
+            "on-primary-container": "#7c839b",
+            "inverse-primary": "#bec6e0",
+            "on-secondary-fixed-variant": "#3323cc",
+            "on-secondary": "#ffffff",
+            "primary-fixed": "#dae2fd",
+            "on-tertiary-fixed": "#002113",
+            "on-tertiary": "#ffffff",
+            "on-primary-fixed": "#131b2e",
+            "on-surface-variant": "#45464d",
+            "error": "#ba1a1a",
+            "surface-bright": "#f7f9fb",
+            "on-primary": "#ffffff",
+            "tertiary-fixed": "#6ffbbe",
+            "surface-tint": "#565e74",
+            "on-error-container": "#93000a",
+            "on-secondary-fixed": "#0f0069",
+            "on-secondary-container": "#fffbff",
+            "primary-container": "#131b2e",
+            "outline-variant": "#c6c6cd",
+            "secondary-container": "#645efb",
+            "outline": "#76777d",
+            "inverse-on-surface": "#eff1f3",
+            "tertiary-fixed-dim": "#4edea3",
+            "on-primary-fixed-variant": "#3f465c",
+            "on-error": "#ffffff",
+            "error-container": "#ffdad6",
+            "background": "#f7f9fb",
+            "on-background": "#191c1e",
+            "surface-container-low": "#f2f4f6",
+            "on-tertiary-container": "#009668",
+            "surface": "#f7f9fb",
+            "secondary": "#4b41e1",
+            "on-surface": "#191c1e",
+            "inverse-surface": "#2d3133",
+            "tertiary-container": "#002113",
+            "primary": "#0f172a",
+            "surface-dim": "#d8dadc",
+            "primary-fixed-dim": "#bec6e0",
+            "surface-container-highest": "#e0e3e5",
+            "surface-container-lowest": "#ffffff",
+            "tertiary": "#000000",
+            "surface-container": "#eceef0"
+          },
+          fontFamily: {
+            sans: ["Inter", "sans-serif"],
+            mono: ["JetBrains Mono", "monospace"]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#f8fafc] text-[#0f172a] antialiased min-h-screen selection:bg-indigo-100 selection:text-indigo-900">
+
+  <!-- ========================================================================= -->
+  <!-- 1. TOP COMMAND BAR (Executive Light Theme from Stitch) -->
+  <!-- ========================================================================= -->
+  <header class="flex justify-between items-center w-full px-6 h-14 bg-white sticky top-0 z-40 border-b border-slate-200 shadow-xs">
+    <!-- Brand Anchor & Quick Search -->
+    <div class="flex items-center gap-6">
+      <div class="flex items-center gap-2.5">
+        <span class="w-7 h-7 bg-slate-900 text-white flex items-center justify-center rounded">
+          <span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1;">shield</span>
+        </span>
+        <span class="font-bold tracking-tight text-slate-900 text-sm">Sentinels Security Auditor</span>
+        <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200 font-medium">v4.2 PRO</span>
+      </div>
+
+      <!-- Live Engine Badges -->
+      <div class="hidden lg:flex items-center gap-2 pl-4 border-l border-slate-200">
+        <div id="badge-provider" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs font-mono font-medium">
+          <span class="w-2 h-2 rounded-full bg-emerald-600 pip-emerald"></span>
+          <span id="label-provider">Azure OpenAI gpt-5-mini Active</span>
+        </div>
+        <div class="inline-flex items-center gap-1 px-2 py-1 rounded bg-slate-100 border border-slate-200 text-slate-600 text-xs font-mono">
+          <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+          <span>Ollama Offline Ready</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions & PDF Quick Trigger -->
+    <div class="flex items-center gap-2.5">
+      <div class="hidden sm:flex items-center gap-1 bg-slate-50 px-2.5 py-1 rounded border border-slate-200 text-xs font-mono text-slate-600">
+        <span class="material-symbols-outlined text-sm">account_tree</span>
+        <span>Branch: main</span>
+      </div>
+
+      <button id="btn-quick-pdf" class="bg-slate-900 hover:bg-slate-800 text-white px-3.5 py-1.5 rounded text-xs font-medium flex items-center gap-1.5 shadow-xs transition-all active:scale-98">
+        <span class="material-symbols-outlined text-sm">picture_as_pdf</span>
+        <span>Read PDF in Browser</span>
+      </button>
+
+      <a href="/api/pdf/download" download class="bg-white hover:bg-slate-50 border border-slate-200 text-slate-800 px-3 py-1.5 rounded text-xs font-medium flex items-center gap-1.5 shadow-xs transition-colors">
+        <span class="material-symbols-outlined text-sm">download</span>
+        <span>Download PDF</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- 2. MAIN COCKPIT WORKSPACE (Stitch Architecture) -->
+  <!-- ========================================================================= -->
+  <main class="max-w-7xl w-full mx-auto p-4 md:p-8 flex flex-col gap-6">
+
+    <!-- SECTION 1: TOP COMMAND & ENGINE TELEMETRY STRIP -->
+    <section class="bg-white rounded-lg border border-slate-200 p-5 shadow-xs">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+        <div>
+          <div class="flex items-center gap-2.5">
+            <h1 class="text-xl font-bold text-slate-900 tracking-tight">Autonomous Security Audit Cockpit</h1>
+            <span class="bg-slate-900 text-white text-xs px-2 py-0.5 rounded font-mono font-medium">TARGET: pallets/flask:3.1.2</span>
+          </div>
+          <p class="text-xs text-slate-600 mt-1">Continuous verification through Multi-Agent deterministic tree-sitter AST and fast-context FastMCP mesh.</p>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-mono px-3 py-1 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            Real-time FastMCP Mesh Ready
+          </span>
+        </div>
+      </div>
+
+      <!-- 4-Card Executive Telemetry Ribbon -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3.5 pt-4">
+        <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-200">
+          <div class="flex items-center justify-between text-slate-500 text-xs font-mono mb-1">
+            <span>SCANS COMPLETED</span>
+            <span class="material-symbols-outlined text-base">task_alt</span>
+          </div>
+          <div class="flex items-baseline gap-2">
+            <span class="text-2xl font-bold text-slate-900 font-mono">1,842</span>
+            <span class="text-xs font-mono text-emerald-700 font-semibold">+14% wk</span>
+          </div>
+          <p class="text-[11px] text-slate-500 mt-1">Autonomous orchestration runs</p>
+        </div>
+
+        <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-200">
+          <div class="flex items-center justify-between text-slate-500 text-xs font-mono mb-1">
+            <span>ZERO-FP VERIFICATION</span>
+            <span class="material-symbols-outlined text-base text-emerald-600">verified</span>
+          </div>
+          <div class="flex items-baseline gap-2">
+            <span class="text-2xl font-bold text-emerald-700 font-mono">99.4%</span>
+            <span class="text-xs font-mono text-slate-600 font-medium">AST Verified</span>
+          </div>
+          <p class="text-[11px] text-slate-500 mt-1">7 false positives neutralized</p>
+        </div>
+
+        <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-200">
+          <div class="flex items-center justify-between text-slate-500 text-xs font-mono mb-1">
+            <span>SOURCE COVERAGE</span>
+            <span class="material-symbols-outlined text-base">code</span>
+          </div>
+          <div class="flex items-baseline gap-2">
+            <span class="text-2xl font-bold text-slate-900 font-mono">4.8M</span>
+            <span class="text-xs font-mono text-slate-500">SLOC</span>
+          </div>
+          <p class="text-[11px] text-slate-500 mt-1">Across 14 production languages</p>
+        </div>
+
+        <div class="bg-slate-50 p-3.5 rounded-lg border border-slate-200">
+          <div class="flex items-center justify-between text-slate-500 text-xs font-mono mb-1">
+            <span>AGENT MESH HEALTH</span>
+            <span class="material-symbols-outlined text-base text-emerald-600">lan</span>
+          </div>
+          <div class="flex items-baseline gap-2">
+            <span class="text-2xl font-bold text-slate-900 font-mono">4 / 4</span>
+            <span class="text-xs font-mono text-emerald-700 font-semibold">ALL ONLINE</span>
+          </div>
+          <p class="text-[11px] text-slate-500 mt-1 truncate">Manager, SAST, IaC, Diff Synth</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: TARGET SCAN ORCHESTRATOR PANEL -->
+    <section class="bg-white rounded-lg border border-slate-200 p-5 shadow-xs">
+      <div class="flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-3.5">
+        <div class="flex-1 flex flex-col md:flex-row items-stretch md:items-center gap-2.5">
+          <!-- Repo URL Input -->
+          <div class="relative flex-1">
+            <span class="absolute left-3 top-2.5 material-symbols-outlined text-slate-400 text-base">link</span>
+            <input id="input-repo-url" class="w-full bg-slate-50 border border-slate-300 rounded pl-9 pr-14 py-2 text-xs md:text-sm font-mono text-slate-900 focus:bg-white focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 outline-none" type="text" value="https://github.com/pallets/flask"/>
+            <span class="absolute right-2.5 top-2.5 text-[10px] font-mono bg-white px-1.5 py-0.5 rounded border border-slate-200 text-slate-500">⌘K</span>
+          </div>
+          <!-- Branch Selector -->
+          <div class="relative w-full md:w-48">
+            <select id="select-branch" class="w-full appearance-none bg-slate-50 border border-slate-300 rounded px-3 py-2 text-xs font-mono text-slate-800 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 outline-none pr-8">
+              <option selected="">main (head: 4f9d1a)</option>
+              <option>release/3.1.x</option>
+              <option>develop</option>
+            </select>
+            <span class="absolute right-2.5 top-2.5 pointer-events-none material-symbols-outlined text-slate-400 text-base">expand_more</span>
+          </div>
+        </div>
+
+        <!-- Primary Audit Trigger Button -->
+        <button id="btn-start-scan" class="bg-slate-900 hover:bg-slate-800 text-white px-6 py-2 rounded text-xs md:text-sm font-semibold flex items-center justify-center gap-2 cursor-pointer shadow-xs active:scale-98 transition-all">
+          <span class="material-symbols-outlined text-base">bolt</span>
+          <span>Initiate Multi-Agent Audit</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- SECTION 3: 5-STAGE LIVE SCAN PIPELINE & TELEMETRY STREAM CONSOLE -->
+    <section class="space-y-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <h2 class="text-lg font-bold text-slate-900">Autonomous Execution Pipeline</h2>
+          <span id="badge-pipeline-status" class="text-xs font-mono bg-slate-100 text-slate-700 px-2 py-0.5 rounded font-medium border border-slate-200">STANDBY</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="w-32 bg-slate-200 rounded-full h-2 overflow-hidden border border-slate-300">
+            <div id="bar-overall-progress" class="bg-slate-900 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+          </div>
+          <span id="label-progress-pct" class="text-xs font-mono text-slate-700 font-semibold">0%</span>
+        </div>
+      </div>
+
+      <!-- 5 Horizontal Pipeline Nodes (Stitch Light Cards) -->
+      <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
+        <!-- Step 01 -->
+        <div id="card-stage-1" class="stage-card p-3.5 bg-white flex flex-col gap-2 cursor-pointer">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-[10px] font-mono text-slate-500 font-semibold">01. INGEST</span>
+            <span id="icon-stage-1" class="material-symbols-outlined text-slate-400 text-base">radio_button_unchecked</span>
+          </div>
+          <p class="text-xs font-semibold text-slate-900 leading-snug">AST Manifest Clustering</p>
+          <p class="text-[11px] font-mono text-slate-500 leading-tight">--depth 1 sandbox | 142 AST trees parsed</p>
+          <div class="mt-auto pt-2 border-t border-slate-100 flex justify-between text-[11px] font-mono text-slate-500">
+            <span id="dur-stage-1">4.2s</span>
+            <span id="stat-stage-1">Waiting</span>
+          </div>
+        </div>
+
+        <!-- Step 02 -->
+        <div id="card-stage-2" class="stage-card p-3.5 bg-white flex flex-col gap-2 cursor-pointer">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-[10px] font-mono text-slate-500 font-semibold">02. SAST SCAN</span>
+            <span id="icon-stage-2" class="material-symbols-outlined text-slate-400 text-base">radio_button_unchecked</span>
+          </div>
+          <p class="text-xs font-semibold text-slate-900 leading-snug">Deterministic Static Scan</p>
+          <p class="text-[11px] font-mono text-slate-500 leading-tight">Semgrep + Regex + OSV CVE check</p>
+          <div class="mt-auto pt-2 border-t border-slate-100 flex justify-between text-[11px] font-mono text-slate-500">
+            <span id="dur-stage-2">12.8s</span>
+            <span id="stat-stage-2">Waiting</span>
+          </div>
+        </div>
+
+        <!-- Step 03 -->
+        <div id="card-stage-3" class="stage-card p-3.5 bg-white flex flex-col gap-2 cursor-pointer">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-[10px] font-mono text-slate-500 font-semibold">03. MCP TRIAGE</span>
+            <span id="icon-stage-3" class="material-symbols-outlined text-slate-400 text-base">radio_button_unchecked</span>
+          </div>
+          <p class="text-xs font-semibold text-slate-900 leading-snug">Deep False-Positive Guard</p>
+          <p class="text-[11px] font-mono text-slate-500 leading-tight">FastMCP user-input sink checks</p>
+          <div class="mt-auto pt-2 border-t border-slate-100 flex justify-between text-[11px] font-mono text-slate-500">
+            <span id="dur-stage-3">44.1s</span>
+            <span id="stat-stage-3">Waiting</span>
+          </div>
+        </div>
+
+        <!-- Step 04 -->
+        <div id="card-stage-4" class="stage-card p-3.5 bg-white flex flex-col gap-2 cursor-pointer">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-[10px] font-mono text-slate-500 font-semibold">04. DIFF SYNTH</span>
+            <span id="icon-stage-4" class="material-symbols-outlined text-slate-400 text-base">radio_button_unchecked</span>
+          </div>
+          <p class="text-xs font-semibold text-slate-900 leading-snug">One-Click Patch Synthesis</p>
+          <p class="text-[11px] font-mono text-slate-500 leading-tight">AST Regression Guard active</p>
+          <div class="mt-auto pt-2 border-t border-slate-100 flex justify-between text-[11px] font-mono text-slate-500">
+            <span id="dur-stage-4">22.0s</span>
+            <span id="stat-stage-4">Waiting</span>
+          </div>
+        </div>
+
+        <!-- Step 05 -->
+        <div id="card-stage-5" class="stage-card p-3.5 bg-white flex flex-col gap-2 cursor-pointer">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-[10px] font-mono text-slate-500 font-semibold">05. DELIVERABLES</span>
+            <span id="icon-stage-5" class="material-symbols-outlined text-slate-400 text-base">radio_button_unchecked</span>
+          </div>
+          <p class="text-xs font-semibold text-slate-900 leading-snug">Format Compilation</p>
+          <p class="text-[11px] font-mono text-slate-500 leading-tight">ReportLab PDF &amp; SARIF 2.1.0</p>
+          <div class="mt-auto pt-2 border-t border-slate-100 flex justify-between text-[11px] font-mono text-slate-500">
+            <span id="dur-stage-5">1.2s</span>
+            <span id="stat-stage-5">Waiting</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Active Stage Detailed Explanation Box -->
+      <div id="box-stage-explanation" class="p-4 rounded-lg bg-indigo-50/70 border border-indigo-200 text-indigo-950 text-xs leading-relaxed flex items-start gap-3">
+        <span class="material-symbols-outlined text-indigo-700 text-xl shrink-0 mt-0.5">info</span>
+        <div>
+          <strong id="exp-title" class="text-slate-900 block font-semibold text-sm mb-0.5">Click any stage above to inspect its execution mechanics</strong>
+          <span id="exp-body" class="text-slate-700">Sentinels executes a cooperative agentic pipeline: deterministic ingestion without LLM tokens, static SAST rule candidate collection, worker deep triage, git diff generation, and ReportLab PDF compilation.</span>
+        </div>
+      </div>
+
+      <!-- Embedded Agent Telemetry Terminal Chassis -->
+      <div class="rounded-lg border border-slate-800 bg-[#0b1120] text-slate-200 overflow-hidden shadow-md">
+        <div class="bg-slate-900 px-4 py-2 border-b border-slate-800 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <div class="flex gap-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-rose-500/80 inline-block"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-500/80 inline-block"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500/80 inline-block"></span>
+            </div>
+            <span class="font-mono text-xs text-slate-400 font-semibold ml-2">Sentinels Agent Mesh Telemetry [stream: live-stdout]</span>
+          </div>
+          <div class="flex items-center gap-3 text-xs font-mono text-slate-400">
+            <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> STREAM CONNECTED</span>
+            <button id="btn-clear-logs" class="hover:text-white transition-colors" title="Clear Console">
+              <span class="material-symbols-outlined text-sm">mop</span>
+            </button>
+          </div>
+        </div>
+        <div id="terminal-logs" class="p-4 font-mono text-xs space-y-1.5 h-44 overflow-y-auto leading-relaxed text-slate-300">
+          <div class="text-slate-400">14:02:18 [SENTINELS] System initialized. Azure OpenAI (gpt-5-mini) active. FastMCP mesh connected.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: PDF DELIVERABLE DEEP-DIVE & VISUAL DECONSTRUCTOR -->
+    <section class="space-y-4">
+      <!-- Section Header -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">Autonomous Deliverables &amp; Executive Report Generation</h2>
+          <p class="text-xs text-slate-600">Deterministic report output formatted for board oversight and engineering PR automation.</p>
+        </div>
+        <div class="flex items-center gap-2.5">
+          <button id="btn-copy-md" class="bg-white border border-slate-300 hover:bg-slate-50 text-slate-800 px-3.5 py-1.5 rounded text-xs font-semibold flex items-center gap-1.5 shadow-xs transition-colors">
+            <span class="material-symbols-outlined text-sm">content_copy</span>
+            <span>Copy PR MD</span>
+          </button>
+          <a id="btn-view-sarif" href="/api/sarif" target="_blank" class="bg-white border border-slate-300 hover:bg-slate-50 text-slate-800 px-3.5 py-1.5 rounded text-xs font-semibold flex items-center gap-1.5 shadow-xs transition-colors">
+            <span class="material-symbols-outlined text-sm">file_download</span>
+            <span>Export SARIF 2.1.0</span>
+          </a>
+          <button id="btn-preview-pdf-modal" class="bg-slate-900 text-white hover:bg-slate-800 px-4 py-1.5 rounded text-xs font-semibold flex items-center gap-1.5 shadow-xs active:scale-98 transition-all">
+            <span class="material-symbols-outlined text-sm">picture_as_pdf</span>
+            <span>Read PDF in Browser</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Executive Dossier Overview Card -->
+      <div class="bg-white rounded-lg border border-slate-200 p-5 shadow-xs">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-3 border-b border-slate-200">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded bg-rose-50 border border-rose-200 text-rose-700 flex items-center justify-center">
+              <span class="material-symbols-outlined text-2xl">description</span>
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="text-sm md:text-base font-bold text-slate-900">SENTINELS_COMPREHENSIVE_AUDIT_REPORT.pdf</h3>
+                <span class="bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] font-mono px-2 py-0.5 rounded font-medium">SIGNED &amp; VERIFIED</span>
+              </div>
+              <p class="text-[11px] font-mono text-slate-500 mt-0.5">SHA256: 4f9d3a98c7e1128e08d6b9fa0021c1729b4e0582d91bb3a2098481b088219af3</p>
+            </div>
+          </div>
+          <!-- Alignment Badges -->
+          <div class="flex items-center gap-1.5">
+            <span class="text-[11px] font-mono text-slate-500 uppercase font-semibold">Alignments:</span>
+            <span class="bg-slate-100 border border-slate-200 text-slate-800 px-2 py-0.5 rounded text-xs font-mono font-semibold">SOC2 Type II</span>
+            <span class="bg-slate-100 border border-slate-200 text-slate-800 px-2 py-0.5 rounded text-xs font-mono font-semibold">ISO 27001</span>
+            <span class="bg-slate-100 border border-slate-200 text-slate-800 px-2 py-0.5 rounded text-xs font-mono font-semibold">PCI-DSS 4.0</span>
+          </div>
+        </div>
+
+        <!-- 4 Critical Metrics Strip inside Dossier -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-3">
+          <div>
+            <span class="text-[11px] font-mono text-slate-500 uppercase">Audit Posture Score</span>
+            <div class="flex items-center gap-2 mt-1">
+              <span class="text-xl font-bold text-amber-600 font-mono">B+ (78/100)</span>
+              <span class="text-[10px] bg-amber-50 text-amber-800 border border-amber-200 px-1.5 rounded font-medium">Remediable</span>
+            </div>
+          </div>
+          <div>
+            <span class="text-[11px] font-mono text-slate-500 uppercase">Confirmed Risk</span>
+            <div class="flex items-center gap-2 mt-1">
+              <span class="text-xl font-bold text-rose-600 font-mono">2 Critical / 3 High</span>
+            </div>
+          </div>
+          <div>
+            <span class="text-[11px] font-mono text-slate-500 uppercase">Target Scope</span>
+            <div class="flex items-center gap-2 mt-1">
+              <span class="text-xs font-semibold text-slate-900 font-mono">pallets/flask (v3.1.2)</span>
+            </div>
+          </div>
+          <div>
+            <span class="text-[11px] font-mono text-slate-500 uppercase">Verification Ratio</span>
+            <div class="flex items-center gap-2 mt-1">
+              <span class="text-xl font-bold text-emerald-700 font-mono">100% Zero-FP</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive Deconstructor Component with Tabs -->
+      <div class="bg-white rounded-lg border border-slate-200 shadow-xs overflow-hidden">
+        <!-- Tab Navigation Strip -->
+        <div class="flex flex-wrap items-center border-b border-slate-200 bg-slate-50 px-4 pt-2">
+          <button class="border-b-2 border-slate-900 text-slate-900 font-semibold px-4 py-2.5 text-xs font-mono flex items-center gap-2" id="tab-btn-0" onclick="switchStitchTab(0)">
+            <span class="material-symbols-outlined text-base">dashboard_customize</span>
+            <span>6-Section PDF Architecture</span>
+          </button>
+          <button class="border-b-2 border-transparent text-slate-600 hover:text-slate-900 font-medium px-4 py-2.5 text-xs font-mono flex items-center gap-2 transition-colors" id="tab-btn-1" onclick="switchStitchTab(1)">
+            <span class="material-symbols-outlined text-base">bug_report</span>
+            <span>Verified Findings Matrix</span>
+            <span class="bg-rose-100 text-rose-700 text-[10px] px-1.5 py-0.2 rounded-full font-mono font-bold">5</span>
+          </button>
+          <button class="border-b-2 border-transparent text-slate-600 hover:text-slate-900 font-medium px-4 py-2.5 text-xs font-mono flex items-center gap-2 transition-colors" id="tab-btn-2" onclick="switchStitchTab(2)">
+            <span class="material-symbols-outlined text-base">difference</span>
+            <span>Unified Git Diff Inspector</span>
+            <span class="bg-emerald-100 text-emerald-800 text-[10px] px-1.5 py-0.2 rounded font-mono font-semibold">AST Guard: PASS</span>
+          </button>
+          <button class="border-b-2 border-transparent text-slate-600 hover:text-slate-900 font-medium px-4 py-2.5 text-xs font-mono flex items-center gap-2 transition-colors" id="tab-btn-3" onclick="switchStitchTab(3)">
+            <span class="material-symbols-outlined text-base">fact_check</span>
+            <span>Compliance &amp; Regulatory Standards</span>
+          </button>
+        </div>
+
+        <!-- TAB PANEL 1: 6-Section PDF Architecture Breakdown -->
+        <div class="p-5" id="tab-panel-0">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="pdf-sections-list">
+            <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 hover:border-slate-400 transition-colors">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-[10px] font-mono text-slate-500 font-bold">PAGE 01</span>
+                <span class="material-symbols-outlined text-slate-400 text-base">analytics</span>
+              </div>
+              <h4 class="text-sm font-semibold text-slate-900 mb-1">Executive Summary &amp; KPI Cards</h4>
+              <p class="text-xs text-slate-600 leading-relaxed">High-level risk index, confirmed posture score (B+), executive letter, and automated sign-off seal.</p>
+            </div>
+            <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 hover:border-slate-400 transition-colors">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-[10px] font-mono text-slate-500 font-bold">PAGE 02</span>
+                <span class="material-symbols-outlined text-slate-400 text-base">inventory</span>
+              </div>
+              <h4 class="text-sm font-semibold text-slate-900 mb-1">Target Scope Manifest &amp; Tree</h4>
+              <p class="text-xs text-slate-600 leading-relaxed">Complete repository dependency tree, SBOM digest (CycloneDX), git commit hash, and compiler config.</p>
+            </div>
+            <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 hover:border-slate-400 transition-colors">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-[10px] font-mono text-slate-500 font-bold">PAGE 03 - 04</span>
+                <span class="material-symbols-outlined text-slate-400 text-base">rule</span>
+              </div>
+              <h4 class="text-sm font-semibold text-slate-900 mb-1">Zero-FP Findings Matrix</h4>
+              <p class="text-xs text-slate-600 leading-relaxed">Tabular ranking of verified CVE/CWE items with CVSS 3.1 base metrics and AST taint path traces.</p>
+            </div>
+            <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 hover:border-slate-400 transition-colors">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-[10px] font-mono text-slate-500 font-bold">PAGE 05 - 07</span>
+                <span class="material-symbols-outlined text-slate-400 text-base">code_blocks</span>
+              </div>
+              <h4 class="text-sm font-semibold text-slate-900 mb-1">Synthesized Git Patches</h4>
+              <p class="text-xs text-slate-600 leading-relaxed">Unified diff listings ready for branch application, including unit test validation logs and AST regression guards.</p>
+            </div>
+            <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 hover:border-slate-400 transition-colors">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-[10px] font-mono text-slate-500 font-bold">PAGE 08</span>
+                <span class="material-symbols-outlined text-slate-400 text-base">map</span>
+              </div>
+              <h4 class="text-sm font-semibold text-slate-900 mb-1">Tactical Remediation Roadmap</h4>
+              <p class="text-xs text-slate-600 leading-relaxed">Prioritized sprint allocation timetable, blast-radius mitigation estimate, and re-scan validation instructions.</p>
+            </div>
+            <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 hover:border-slate-400 transition-colors">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-[10px] font-mono text-slate-500 font-bold">PAGE 09</span>
+                <span class="material-symbols-outlined text-slate-400 text-base">verified_user</span>
+              </div>
+              <h4 class="text-sm font-semibold text-slate-900 mb-1">SOC2 &amp; ISO 27001 Crosswalk</h4>
+              <p class="text-xs text-slate-600 leading-relaxed">Explicit mapping to CC6.1, CC6.6, CC7.1 and ISO A.12.6.1 for compliance auditor evidence submissions.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB PANEL 2: Verified Findings Matrix (5) -->
+        <div class="hidden p-5 overflow-x-auto" id="tab-panel-1">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="bg-slate-50 border-b border-slate-200 text-[11px] font-mono text-slate-500 uppercase tracking-wider">
+                <th class="py-2.5 px-4">Severity &amp; CWE</th>
+                <th class="py-2.5 px-4">Finding &amp; Category</th>
+                <th class="py-2.5 px-4">Location</th>
+                <th class="py-2.5 px-4">Agent Confidence</th>
+                <th class="py-2.5 px-4 text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody id="findings-table-body" class="divide-y divide-slate-100 font-mono">
+              <!-- Dynamically populated or pre-filled -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- TAB PANEL 3: Unified Git Diff Inspector -->
+        <div class="hidden p-5" id="tab-panel-2">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 mb-3 border-b border-slate-200">
+            <div>
+              <div class="flex items-center gap-2">
+                <span id="diff-filename" class="text-xs md:text-sm font-bold text-slate-900 font-mono">PATCH 1/5: auth/views.py</span>
+                <span class="text-[10px] bg-rose-50 text-rose-700 border border-rose-200 px-1.5 py-0.5 rounded font-mono font-bold">CWE-89 Remediation</span>
+              </div>
+              <p class="text-xs text-slate-600 mt-0.5">Converts direct f-string SQL query into parameterized prepared statement with bound arguments.</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-[11px] text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-1 rounded font-mono font-semibold flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm">check_circle</span>
+                AST Regression Guard: Passed
+              </span>
+              <button class="bg-slate-900 text-white hover:bg-slate-800 px-3 py-1 rounded text-xs font-semibold flex items-center gap-1.5 shadow-xs">
+                <span class="material-symbols-outlined text-sm">merge</span>
+                <span>Create Remediated PR</span>
+              </button>
+            </div>
+          </div>
+          <!-- Syntax-Highlighted Code Viewport -->
+          <div class="rounded border border-slate-200 bg-white font-mono text-xs overflow-x-auto shadow-xs">
+            <div class="bg-slate-50 px-3 py-1.5 border-b border-slate-200 text-[11px] text-slate-500 flex items-center justify-between">
+              <span>diff --git a/auth/views.py b/auth/views.py</span>
+              <span>index 7b819..2c991 100644</span>
+            </div>
+            <div id="diff-body" class="py-2">
+              <div class="px-3 py-0.5 text-slate-400 bg-slate-50">@@ -139,7 +139,8 @@ def get_tenant_accounts(org_id: str):</div>
+              <div class="px-3 py-0.5 text-slate-500"> 139 |     """Retrieve isolated tenant account ledger records."""</div>
+              <div class="px-3 py-0.5 text-slate-500"> 140 |     db = get_database_connection()</div>
+              <div class="px-3 py-0.5 text-slate-500"> 141 |     cursor = db.cursor()</div>
+              <div class="px-3 py-0.5 bg-rose-50 text-rose-900 border-l-4 border-rose-500 flex items-start">
+                <span class="text-rose-500 font-bold mr-3 select-none">- 142</span>
+                <span>-    query = f"SELECT * FROM accounts WHERE tenant_id = '{org_id}'"</span>
+              </div>
+              <div class="px-3 py-0.5 bg-rose-50 text-rose-900 border-l-4 border-rose-500 flex items-start">
+                <span class="text-rose-500 font-bold mr-3 select-none">- 143</span>
+                <span>-    cursor.execute(query)</span>
+              </div>
+              <div class="px-3 py-0.5 bg-emerald-50 text-emerald-900 border-l-4 border-emerald-500 flex items-start">
+                <span class="text-emerald-600 font-bold mr-3 select-none">+ 142</span>
+                <span>+    query = "SELECT * FROM accounts WHERE tenant_id = :tenant_id"</span>
+              </div>
+              <div class="px-3 py-0.5 bg-emerald-50 text-emerald-900 border-l-4 border-emerald-500 flex items-start">
+                <span class="text-emerald-600 font-bold mr-3 select-none">+ 143</span>
+                <span>+    cursor.execute(query, {"tenant_id": org_id})</span>
+              </div>
+              <div class="px-3 py-0.5 text-slate-500"> 144 |     records = cursor.fetchall()</div>
+              <div class="px-3 py-0.5 text-slate-500"> 145 |     return jsonify({"status": "success", "data": records})</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB PANEL 4: Compliance & Regulatory Standards Matrix -->
+        <div class="hidden p-5" id="tab-panel-3">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="p-4 rounded-lg bg-slate-50 border border-slate-200">
+              <div class="flex items-center justify-between mb-2">
+                <h4 class="font-bold text-slate-900 text-xs font-mono">SOC 2 Type II</h4>
+                <span class="bg-emerald-50 text-emerald-800 text-[10px] px-2 py-0.5 rounded font-mono font-bold border border-emerald-200">Passable Post-Patch</span>
+              </div>
+              <ul class="space-y-2 text-xs text-slate-600">
+                <li class="flex items-start gap-2">
+                  <span class="material-symbols-outlined text-emerald-600 text-sm mt-0.5">check</span>
+                  <span><strong>CC6.1:</strong> Logical Access Controls &amp; Perimeter Ingress validation</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="material-symbols-outlined text-emerald-600 text-sm mt-0.5">check</span>
+                  <span><strong>CC6.6:</strong> Boundary Protection against SQL Injection (CWE-89 mapped)</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="material-symbols-outlined text-emerald-600 text-sm mt-0.5">check</span>
+                  <span><strong>CC7.1:</strong> Vulnerability Detection &amp; Automated AST Patching</span>
+                </li>
+              </ul>
+            </div>
+            <div class="p-4 rounded-lg bg-slate-50 border border-slate-200">
+              <div class="flex items-center justify-between mb-2">
+                <h4 class="font-bold text-slate-900 text-xs font-mono">ISO / IEC 27001:2022</h4>
+                <span class="bg-emerald-50 text-emerald-800 text-[10px] px-2 py-0.5 rounded font-mono font-bold border border-emerald-200">Compliant</span>
+              </div>
+              <ul class="space-y-2 text-xs text-slate-600">
+                <li class="flex items-start gap-2">
+                  <span class="material-symbols-outlined text-emerald-600 text-sm mt-0.5">check</span>
+                  <span><strong>A.8.28:</strong> Secure Coding Guidelines enforced via deterministic rules</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="material-symbols-outlined text-emerald-600 text-sm mt-0.5">check</span>
+                  <span><strong>A.8.29:</strong> Security Testing in Development &amp; continuous CI integration</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="material-symbols-outlined text-emerald-600 text-sm mt-0.5">check</span>
+                  <span><strong>A.8.8:</strong> Management of Technical Vulnerabilities (OSV mapped)</span>
+                </li>
+              </ul>
+            </div>
+            <div class="p-4 rounded-lg bg-slate-50 border border-slate-200">
+              <div class="flex items-center justify-between mb-2">
+                <h4 class="font-bold text-slate-900 text-xs font-mono">OWASP Top 10 (2021)</h4>
+                <span class="bg-emerald-50 text-emerald-800 text-[10px] px-2 py-0.5 rounded font-mono font-bold border border-emerald-200">100% Covered</span>
+              </div>
+              <ul class="space-y-2 text-xs text-slate-600">
+                <li class="flex items-start gap-2">
+                  <span class="material-symbols-outlined text-rose-600 text-sm mt-0.5">warning</span>
+                  <span><strong>A03:2021:</strong> Injection (CWE-89 remediated by AST Patch)</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="material-symbols-outlined text-rose-600 text-sm mt-0.5">warning</span>
+                  <span><strong>A07:2021:</strong> Identification &amp; Auth Failures (CWE-798 resolved)</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="material-symbols-outlined text-amber-600 text-sm mt-0.5">info</span>
+                  <span><strong>A05:2021:</strong> Security Misconfiguration (CWE-614 cookie flag patched)</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BOTTOM AUDIT FOOTER & METRIC LOG -->
+    <footer class="pt-4 pb-12 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between text-xs font-mono text-slate-500 gap-2">
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+        <span>Sentinels Security Engine Core v4.2.0-release. Build 2026-10-03.</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <span>AST Cache: 100% Warm</span>
+        <span>MCP Protocol: v1.3</span>
+        <span class="text-slate-700 font-semibold">Session: #4f9d-88219-pallets</span>
+      </div>
+    </footer>
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- 5. INLINE PDF PREVIEW MODAL -->
+  <!-- ========================================================================= -->
+  <div id="modal-pdf" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 md:p-8 modal-overlay">
+    <div class="relative w-full max-w-5xl h-[88vh] bg-white rounded-xl border border-slate-300 flex flex-col overflow-hidden shadow-2xl">
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between px-6 py-4 bg-slate-50 border-b border-slate-200">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-rose-100 text-rose-700 border border-rose-300 flex items-center justify-center font-bold text-xs">PDF</div>
+          <div>
+            <h3 class="text-sm font-bold text-slate-900">SENTINELS_COMPREHENSIVE_AUDIT_REPORT.pdf</h3>
+            <p class="text-xs text-slate-500 font-mono">Executive White-Theme Report • Generated via ReportLab</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <a href="/api/pdf/download" download class="px-3 py-1.5 rounded-md bg-slate-900 hover:bg-slate-800 text-white text-xs font-medium flex items-center gap-1.5 transition-colors">
+            <span class="material-symbols-outlined text-sm">download</span>
+            <span>Download</span>
+          </a>
+          <button id="btn-close-pdf-modal" class="p-1.5 rounded-md hover:bg-slate-200 text-slate-500 hover:text-slate-800 transition-colors">
+            <span class="material-symbols-outlined text-xl">close</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Iframe for direct PDF preview -->
+      <div class="flex-1 w-full h-full bg-slate-100">
+        <iframe id="iframe-pdf" src="/api/pdf/view" class="w-full h-full border-0"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive Script for Tab Switching -->
+  <script>
+    function switchStitchTab(index) {
+      for (let i = 0; i < 4; i++) {
+        const panel = document.getElementById('tab-panel-' + i);
+        const btn = document.getElementById('tab-btn-' + i);
+        if (panel && btn) {
+          if (i === index) {
+            panel.classList.remove('hidden');
+            btn.classList.add('border-slate-900', 'text-slate-900', 'font-semibold');
+            btn.classList.remove('border-transparent', 'text-slate-600');
+          } else {
+            panel.classList.add('hidden');
+            btn.classList.remove('border-slate-900', 'text-slate-900', 'font-semibold');
+            btn.classList.add('border-transparent', 'text-slate-600');
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- App Script -->
+  <script src="/static/app.js"></script>
+</body>
+</html>

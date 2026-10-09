@@ -1,0 +1,184 @@
+/* src/sentinels/web/static/style.css */
+/* Stitch Design System - Sentinels Security Cockpit (Executive Light Theme) */
+
+:root {
+  --bg-canvas: #f8fafc;
+  --bg-surface-0: #ffffff;
+  --bg-surface-1: #f1f5f9;
+  --bg-surface-2: #e2e8f0;
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --text-dim: #64748b;
+  --border-subtle: #e2e8f0;
+  --border-focus: #cbd5e1;
+  --accent-primary: #0f172a;
+  --accent-indigo: #4f46e5;
+  --accent-cyan: #0284c7;
+  --accent-emerald: #059669;
+  --accent-amber: #d97706;
+  --accent-rose: #e11d48;
+}
+
+body {
+  background-color: #f8fafc;
+  color: #0f172a;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-mono, .code-font {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Solid Enterprise Panels */
+.solid-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.04), 0 1px 2px -1px rgba(15, 23, 42, 0.04);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.solid-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.05), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+}
+
+/* Pulsing Status Pips */
+@keyframes pulse-emerald-pip {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(0.95);
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0);
+  }
+}
+
+.pip-emerald {
+  animation: pulse-emerald-pip 2s infinite ease-in-out;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Pipeline Stage Cards */
+.stage-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.stage-card:hover {
+  border-color: #94a3b8;
+  transform: translateY(-1px);
+}
+
+.stage-card.active {
+  border-color: #4f46e5 !important;
+  background: #ffffff;
+  box-shadow: 0 4px 12px -2px rgba(79, 70, 229, 0.15);
+}
+
+.stage-card.active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #4f46e5;
+}
+
+.stage-card.completed {
+  border-color: #a7f3d0 !important;
+  background: #ffffff;
+}
+
+.stage-card.completed::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #10b981;
+}
+
+/* Terminal Console */
+.terminal-chassis {
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: 8px;
+  box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.1), 0 4px 6px -4px rgba(15, 23, 42, 0.1);
+}
+
+/* Code Diff Viewport */
+.diff-container {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+}
+
+.diff-line-delete {
+  background-color: #fff1f2;
+  color: #9f1239;
+  border-left: 3px solid #f43f5e;
+}
+
+.diff-line-add {
+  background-color: #f0fdf4;
+  color: #065f46;
+  border-left: 3px solid #10b981;
+}
+
+.diff-line-context {
+  color: #475569;
+  border-left: 3px solid transparent;
+}
+
+.diff-line-context:hover {
+  background-color: #f8fafc;
+}
+
+/* PDF Section Highlight Card */
+.pdf-section-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pdf-section-card:hover {
+  transform: translateX(3px);
+  border-color: #4f46e5;
+  box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.05);
+}
+
+/* Modal Overlay */
+.modal-overlay {
+  background-color: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(4px);
+}

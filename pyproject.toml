@@ -1,0 +1,31 @@
+[project]
+name = "sentinels-saas"
+version = "0.1.0"
+description = "Sentinels: An enterprise-grade agentic security analyzer built on Microsoft Agent Framework."
+requires-python = ">=3.10"
+dependencies = [
+    "agent-framework>=0.1.0",
+    "agent-framework-openai>=0.1.0",
+    "agent-framework-ollama>=0.1.0",
+    "openai>=1.40.0",
+    "mcp>=0.1.0",
+    "pydantic>=2.7.0",
+    "python-dotenv>=1.0.0",
+    "semgrep>=1.0.0",
+    "reportlab>=4.0.0",
+    "pillow>=10.0.0",
+    "fastapi>=0.110.0",
+    "uvicorn>=0.28.0",
+    "packaging>=23.0",
+]
+
+[project.scripts]
+sentinels = "sentinels.cli:main"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+# Tell setuptools to look inside the src/ folder for our code
+[tool.setuptools.packages.find]
+where = ["src"]

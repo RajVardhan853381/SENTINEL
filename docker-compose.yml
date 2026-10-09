@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  sentinels:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sentinels-analyzer
+    environment:
+      - LLM_PROVIDER=ollama
+      - OLLAMA_HOST=http://ollama:11434
+      - OLLAMA_MODEL=llama3.2
+    volumes:
+      - ./reports:/workspace/reports
+    depends_on:
+      - ollama
+    networks:
+      - sentinel-net
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: sentinels-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    networks:
+      - sentinel-net
+
+volumes:
+  ollama_data:
+
+networks:
+  sentinel-net:
+    driver: bridge
